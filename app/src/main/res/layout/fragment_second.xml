@@ -65,7 +65,7 @@
             android:insetTop="0dp"
             android:insetBottom="0dp"
             android:backgroundTint="@color/green_main"
-            android:text="@string/next"
+            android:text="@string/choose_a_user"
             android:textSize="12sp"
             app:cornerRadius="12dp"
             />
