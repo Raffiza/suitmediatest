@@ -5,22 +5,27 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.suitmediatest.R
+import com.example.suitmediatest.data.Repository
 import com.example.suitmediatest.databinding.FragmentSecondBinding
+import com.example.suitmediatest.ui.MainViewModel
+import com.example.suitmediatest.utils.MainViewModelFactory
 
 class SecondFragment : Fragment() {
 
     private var _binding : FragmentSecondBinding? = null
     private val binding get() = _binding!!
 
-    val args : SecondFragmentArgs by navArgs()
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentSecondBinding.inflate(inflater,container,false)
         return binding.root
     }
@@ -31,6 +36,8 @@ class SecondFragment : Fragment() {
         populateUI()
 
         with(binding){
+            toolbar.toolbarTitle.text = getString(R.string.second_string)
+
             btnChooseUser.setOnClickListener {
                 view.findNavController().navigate(R.id.action_secondFragment_to_thirdFragment)
             }
@@ -42,8 +49,15 @@ class SecondFragment : Fragment() {
     }
 
     private fun populateUI(){
-        val name = args.name
-        binding.txtName.text = name
+        val repository = Repository()
+        val viewModelFactory = MainViewModelFactory(repository)
+        viewModel = ViewModelProvider(this,viewModelFactory).get(MainViewModel::class.java)
+        val name = viewModel.getName()
+        val selectedname = viewModel.getSelectedName()
+        with(binding){
+            txtName.text = name
+            txtSelectedName.text = selectedname
+        }
     }
 
     override fun onDestroy() {

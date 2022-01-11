@@ -11,4 +11,7 @@
     <string name="selected_user_name">Selected User Name</string>
     <string name="email">email</string>
     <string name="choose_a_user">Choose a User</string>
+    <string name="third_screen">Third Screen</string>
+    <string name="second_string">Second Screen</string>
+    <string name="can_t_connect_to_internet">Can\'t connect to internet</string>
 </resources>

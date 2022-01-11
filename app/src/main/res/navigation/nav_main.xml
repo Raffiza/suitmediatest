@@ -27,10 +27,6 @@
             app:destination="@id/firstFragment"
             app:popUpTo="@id/firstFragment"
             app:popUpToInclusive="true" />
-        <argument
-            android:name="name"
-            app:argType="string"
-            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/thirdFragment"

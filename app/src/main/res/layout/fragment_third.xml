@@ -22,7 +22,35 @@
             android:id="@+id/rvUser"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:listitem="@layout/cardview"/>
+            tools:listitem="@layout/cardview"
+            android:visibility="gone"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/txt_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@string/can_t_connect_to_internet"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/light_gray"
+            android:visibility="gone"
+            />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:indeterminateTintMode="src_atop" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
