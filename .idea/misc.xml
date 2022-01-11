@@ -3,10 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Kuliah/androidstudio/suitmediatest/app/src/main/res/drawable/textbox.xml" value="0.3828125" />
         <entry key="..\:/Kuliah/androidstudio/suitmediatest/app/src/main/res/layout/activity_main.xml" value="0.22" />
-        <entry key="..\:/Kuliah/androidstudio/suitmediatest/app/src/main/res/layout/fragment_first.xml" value="0.20520833333333333" />
-        <entry key="..\:/Kuliah/androidstudio/suitmediatest/app/src/main/res/layout/fragment_second.xml" value="0.19114583333333332" />
-        <entry key="..\:/Kuliah/androidstudio/suitmediatest/app/src/main/res/layout/fragment_third.xml" value="0.20520833333333333" />
+        <entry key="..\:/Kuliah/androidstudio/suitmediatest/app/src/main/res/layout/cardview.xml" value="0.36666666666666664" />
+        <entry key="..\:/Kuliah/androidstudio/suitmediatest/app/src/main/res/layout/fragment_first.xml" value="0.2" />
+        <entry key="..\:/Kuliah/androidstudio/suitmediatest/app/src/main/res/layout/fragment_second.xml" value="0.33" />
+        <entry key="..\:/Kuliah/androidstudio/suitmediatest/app/src/main/res/layout/fragment_third.xml" value="0.25" />
         <entry key="..\:/Kuliah/androidstudio/suitmediatest/app/src/main/res/layout/toolbar.xml" value="0.36666666666666664" />
       </map>
     </option>
