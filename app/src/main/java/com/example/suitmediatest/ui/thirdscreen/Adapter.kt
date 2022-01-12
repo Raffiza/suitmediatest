@@ -11,17 +11,13 @@ import com.example.suitmediatest.data.model.Data
 import com.example.suitmediatest.databinding.CardviewBinding
 import java.util.*
 
-class Adapter(private val context : Context, private val listener : onItemClickListener) : RecyclerView.Adapter<Adapter.ViewHolder>() {
+class Adapter(private val context : Context, private val listener : OnItemClickListener) : RecyclerView.Adapter<Adapter.ViewHolder>() {
 
     private var dataset : List<Data> = Collections.emptyList()
 
     fun setData(data: List<Data>){
         this.dataset = data
         notifyDataSetChanged()
-    }
-
-    fun getData() : List<Data>{
-        return dataset
     }
 
     inner class ViewHolder(private val binding: CardviewBinding) : RecyclerView.ViewHolder(binding.root), View.OnClickListener{
@@ -61,7 +57,7 @@ class Adapter(private val context : Context, private val listener : onItemClickL
 
     override fun getItemCount(): Int = dataset.size
 
-    interface onItemClickListener {
+    interface OnItemClickListener {
         fun onItemclick(position: Int)
     }
 }

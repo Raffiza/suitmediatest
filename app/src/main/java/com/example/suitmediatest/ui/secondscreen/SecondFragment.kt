@@ -5,10 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.navArgs
+import androidx.navigation.Navigation
 import com.example.suitmediatest.R
 import com.example.suitmediatest.data.Repository
 import com.example.suitmediatest.databinding.FragmentSecondBinding
@@ -33,31 +31,40 @@ class SecondFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        populateUI()
-
-        with(binding){
-            toolbar.toolbarTitle.text = getString(R.string.second_string)
-
-            btnChooseUser.setOnClickListener {
-                view.findNavController().navigate(R.id.action_secondFragment_to_thirdFragment)
-            }
-            toolbar.backBtn.setOnClickListener {
-                view.findNavController().navigate(R.id.action_secondFragment_to_firstFragment)
-            }
-        }
+        initiateUI()
 
     }
 
-    private fun populateUI(){
+    private fun initiateUI(){
         val repository = Repository()
         val viewModelFactory = MainViewModelFactory(repository)
         viewModel = ViewModelProvider(this,viewModelFactory).get(MainViewModel::class.java)
+
         val name = viewModel.getName()
         val selectedname = viewModel.getSelectedName()
+
         with(binding){
             txtName.text = name
+
             txtSelectedName.text = selectedname
+
+            toolbar.toolbarTitle.text = getString(R.string.second_string)
+
+            btnChooseUser.setOnClickListener {
+                navigateToNextFragment()
+            }
+            toolbar.backBtn.setOnClickListener {
+                navigateBack()
+            }
         }
+    }
+
+    private fun navigateToNextFragment(){
+        Navigation.findNavController(requireView()).navigate(R.id.action_secondFragment_to_thirdFragment)
+    }
+
+    private fun navigateBack(){
+        Navigation.findNavController(requireView()).navigate(R.id.action_secondFragment_to_firstFragment)
     }
 
     override fun onDestroy() {

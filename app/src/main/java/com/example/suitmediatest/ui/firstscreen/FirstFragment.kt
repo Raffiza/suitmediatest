@@ -38,7 +38,7 @@ class FirstFragment : Fragment() {
                 checkPalindrome(text)
             }
             btnNext.setOnClickListener {
-                navigatetoNextFragment()
+                navigateToNextFragment()
             }
         }
     }
@@ -55,7 +55,7 @@ class FirstFragment : Fragment() {
         }
     }
 
-    fun navigatetoNextFragment(){
+    fun navigateToNextFragment(){
         val repository = Repository()
         val viewModelFactory = MainViewModelFactory(repository)
         viewModel = ViewModelProvider(this,viewModelFactory).get(MainViewModel::class.java)

@@ -1,6 +1,7 @@
 package com.example.suitmediatest.ui.thirdscreen
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,14 +16,13 @@ import com.example.suitmediatest.data.model.Data
 import com.example.suitmediatest.databinding.FragmentThirdBinding
 import com.example.suitmediatest.ui.MainViewModel
 import com.example.suitmediatest.utils.MainViewModelFactory
-import java.util.*
 
-class ThirdFragment : Fragment() ,Adapter.onItemClickListener{
+class ThirdFragment : Fragment() ,Adapter.OnItemClickListener{
 
     private var _binding : FragmentThirdBinding? = null
     private val binding get() = _binding!!
 
-    private var rvData : List<Data> = Collections.emptyList()
+    private lateinit var rvData : List<Data>
 
     private lateinit var viewModel: MainViewModel
 
@@ -37,8 +37,12 @@ class ThirdFragment : Fragment() ,Adapter.onItemClickListener{
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initiateUI()
         initiateObserver()
 
+    }
+
+    private fun initiateUI(){
         with(binding){
             toolbar.toolbarTitle.text = getString(R.string.third_screen)
 
@@ -55,13 +59,19 @@ class ThirdFragment : Fragment() ,Adapter.onItemClickListener{
         viewModel.getData()
 
         viewModel.myResponse.observe(this, { response ->
+
+            binding.rvUser.visibility = View.GONE
+            binding.progress.visibility = View.VISIBLE
+
             if(response.isSuccessful){
+                Log.d("response","observe")
                 binding.progress.visibility = View.GONE
                 binding.rvUser.visibility = View.VISIBLE
 
                 val data = response.body()?.data
                 if(data!=null){
-                    initiateUI(data)
+                    rvData = data
+                    setRecyclerView()
                 }
             }
             else{
@@ -71,17 +81,24 @@ class ThirdFragment : Fragment() ,Adapter.onItemClickListener{
         })
     }
 
-    private fun initiateUI(data : List<Data>){
+    private fun setRecyclerView(){
         val adapter = Adapter(requireContext(),this)
-
-        adapter.setData(data)
-        rvData = adapter.getData()
+        adapter.setData(rvData)
 
         binding.run {
             rvUser.layoutManager = LinearLayoutManager(requireContext())
             rvUser.setHasFixedSize(true)
             rvUser.adapter = adapter
+
+            swipeRefresh.run {
+                setOnRefreshListener {
+                    progress.visibility = View.VISIBLE
+                    viewModel.getData()
+                    isRefreshing = false
+                }
+            }
         }
+
     }
 
     private fun navigateBack(){
