@@ -1,60 +1,120 @@
 package com.example.suitmediatest.ui.thirdscreen
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.suitmediatest.R
+import com.example.suitmediatest.data.Repository
+import com.example.suitmediatest.data.model.Data
+import com.example.suitmediatest.databinding.FragmentThirdBinding
+import com.example.suitmediatest.ui.MainViewModel
+import com.example.suitmediatest.utils.MainViewModelFactory
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class ThirdFragment : Fragment() ,Adapter.OnItemClickListener{
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ThirdFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class ThirdFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var _binding : FragmentThirdBinding? = null
+    private val binding get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var rvData : List<Data>
+
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_third, container, false)
+    ): View {
+        _binding = FragmentThirdBinding.inflate(inflater,container,false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ThirdFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ThirdFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        initiateUI()
+        initiateObserver()
+
+    }
+
+    private fun initiateUI(){
+        with(binding){
+            toolbar.toolbarTitle.text = getString(R.string.third_screen)
+
+            toolbar.backBtn.setOnClickListener {
+                navigateBack()
+            }
+        }
+    }
+
+    private fun initiateObserver(){
+        val repository = Repository()
+        val viewModelFactory = MainViewModelFactory(repository)
+        viewModel = ViewModelProvider(this,viewModelFactory).get(MainViewModel::class.java)
+        viewModel.getData()
+
+        viewModel.myResponse.observe(this, { response ->
+
+            binding.rvUser.visibility = View.GONE
+            binding.progress.visibility = View.VISIBLE
+
+            if(response.isSuccessful){
+                Log.d("response","observe")
+                binding.progress.visibility = View.GONE
+                binding.rvUser.visibility = View.VISIBLE
+
+                val data = response.body()?.data
+                if(data!=null){
+                    rvData = data
+                    setRecyclerView()
                 }
             }
+            else{
+                binding.progress.visibility = View.GONE
+                binding.txtError.visibility = View.VISIBLE
+            }
+        })
     }
+
+    private fun setRecyclerView(){
+        val adapter = Adapter(requireContext(),this)
+        adapter.setData(rvData)
+
+        binding.run {
+            rvUser.layoutManager = LinearLayoutManager(requireContext())
+            rvUser.setHasFixedSize(true)
+            rvUser.adapter = adapter
+
+            swipeRefresh.run {
+                setOnRefreshListener {
+                    progress.visibility = View.VISIBLE
+                    viewModel.getData()
+                    isRefreshing = false
+                }
+            }
+        }
+
+    }
+
+    private fun navigateBack(){
+        Navigation.findNavController(requireView()).navigate(R.id.action_thirdFragment_to_secondFragment)
+    }
+
+
+    override fun onItemclick(position: Int) {
+        val selectedName = rvData[position].first_name + " " + rvData[position].last_name
+        viewModel.setSelectedName(selectedName)
+        Toast.makeText(requireContext(),"$selectedName dipilih",Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+
 }
